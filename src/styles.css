@@ -1,0 +1,8 @@
+html,body,#root { height: 100%; margin: 0; }
+.app { width: 100vw; height: 100vh; position: relative; background: linear-gradient(180deg,#0b1020,#082032); color: #e6f0ff; font-family: Inter, system-ui, Arial; }
+
+.canvas { width: 100%; height: 100%; }
+
+.hud { position: absolute; right: 16px; top: 16px; background: rgba(0,0,0,0.4); padding: 12px; border-radius: 8px; backdrop-filter: blur(6px); }
+.hud h3 { margin: 0 0 8px 0; font-size: 14px }
+.hud .btn { display: inline-block; margin-right: 8px; padding: 6px 10px; background: #0b74ff; color: white; border-radius: 6px; cursor: pointer; }
