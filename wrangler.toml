@@ -1,0 +1,14 @@
+name = "smart-robotics-threejs"
+main = "dist"
+compatibility_date = "2025-09-15"
+
+# To publish with Wrangler Pages, you will still run:
+# npx @cloudflare/wrangler pages publish ./dist --project-name=smart-robotics-threejs
+
+[build]
+command = "npm run build"
+
+# If you want to use a specific node version for Pages builds, add:
+# [build.environment]
+#   node_version = "18"
+
