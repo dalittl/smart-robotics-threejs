@@ -29,6 +29,10 @@ npm run dev
 
 ## Notes
 - This project is intentionally small. Replace the primitive robot model with GLTF/GLB models for production.
+
+Archived components
+-------------------
+If you previously removed components from `src/components`, you can find lightweight archived placeholders in `src/archived-components/`. These contain minimal stubs so you can recover the original UI quickly if you want to restore the full portfolio layout.
 - To build a production bundle run `npm run build` and `npm run preview` to preview the built app.
 
 ## Useful links
