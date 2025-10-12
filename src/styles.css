@@ -88,15 +88,15 @@ main, footer, .hero, .section, .site-footer, .container, .features{ display:bloc
 
 .hero-center{
   position: fixed;
-  top: 50%;
+  top: 44%; /* nudged up to avoid clipping */
   left: 50%;
   transform: translate(-50%, -50%);
   display: block;
   width: 100%;
   text-align: center;
-  background: #ffffff; /* neutral white background */
+  background: transparent; /* allow overlap */
   color: #071025;
-  z-index: 999;
+  z-index: 10;
 }
 .hero-center h1{
   font-size: clamp(34px, 7vw, 72px);
@@ -114,17 +114,23 @@ main, footer, .hero, .section, .site-footer, .container, .features{ display:bloc
 }
 
 .robot-glb-viewer{
+  position: absolute;
+  left: 50%;
+  top: 48%; /* moved down to create padding from headline */
+  transform: translateX(-50%);
   width: 520px;
   height: 380px;
-  margin: 20px auto 0 auto;
-  border-radius: 0; /* blend with white page */
+  margin: 0;
+  border-radius: 0; /* blend with page */
   overflow: visible;
-  background: transparent; /* make viewer background transparent */
-  box-shadow: none; /* remove visible box */
+  background: transparent;
+  box-shadow: none;
+  z-index: 20; /* above hero text so model overlaps */
+  pointer-events: auto; /* allow orbit controls to work */
 }
 
 @media (max-width:900px){
   .floating-header{ top:0; left:12px; padding:8px 12px; height:140px }
   .logo{ height:100%; width:auto; transform: translateY(-20px) }
-  .robot-glb-viewer{ width:360px; height:260px }
+  .robot-glb-viewer{ width:360px; height:260px; top:52% }
 }
