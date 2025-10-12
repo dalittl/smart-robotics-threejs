@@ -1,10 +1,10 @@
-import React, { Suspense, useRef, useEffect } from 'react'
+import React, { Suspense, useRef, useEffect, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, useGLTF, Stage, useAnimations } from '@react-three/drei'
 import * as THREE from 'three'
 
-function Model() {
-  // load the specific user-provided model from the project root (served at /)
+// ModelLoader calls useGLTF (must be rendered only when the asset is confirmed available)
+function ModelLoader() {
   const group = useRef()
   const { scene, animations } = useGLTF('/robot_no.1_-_rigged_-_animated.glb')
   const { actions, names, mixer } = useAnimations(animations, group)
@@ -14,8 +14,6 @@ function Model() {
       console.info('[RobotGLBViewer] no animations found in GLB')
       return
     }
-
-  // animation details logging removed per user request
 
     if (!actions) return
 
@@ -48,6 +46,54 @@ function Model() {
   }, [actions, names, mixer])
 
   return <primitive ref={group} object={scene} dispose={null} />
+}
+
+// Model performs a lightweight fetch preflight to check the asset exists and is binary (not HTML)
+function Model() {
+  const [status, setStatus] = useState('checking') // 'checking' | 'ok' | 'missing'
+
+  useEffect(() => {
+    let cancelled = false
+    const url = '/robot_no.1_-_rigged_-_animated.glb'
+    // fetch only the first few bytes (range) to detect HTML responses. Some hosts may not support Range; fall back to full fetch.
+    fetch(url, { method: 'GET', headers: { Range: 'bytes=0-255' } })
+      .then(async (res) => {
+        if (cancelled) return
+        const ct = res.headers.get('content-type') || ''
+        // If the server returned HTML (e.g., a Pages 404), content-type may be text/html
+        if (ct.includes('text/html')) {
+          setStatus('missing')
+          return
+        }
+        // If we got a 206 Partial Content or 200 OK and not HTML, assume ok
+        if (res.ok) {
+          setStatus('ok')
+          return
+        }
+        setStatus('missing')
+      })
+      .catch(() => {
+        if (!cancelled) setStatus('missing')
+      })
+
+    return () => { cancelled = true }
+  }, [])
+
+  if (status === 'checking') return null
+  if (status === 'missing') {
+    // Render a small placeholder so the page doesn't crash — keeps visual layout stable
+    return (
+      <group>
+        {/* lightweight warning placeholder - not visible in production layout but useful for debugging */}
+        <mesh position={[0, 0.5, 0]}>
+          <boxGeometry args={[0.01, 0.01, 0.01]} />
+          <meshBasicMaterial color="black" />
+        </mesh>
+      </group>
+    )
+  }
+
+  return <ModelLoader />
 }
 
 export default function RobotGLBViewer({ className = '' }){
