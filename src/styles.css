@@ -113,7 +113,18 @@ main, footer, .hero, .section, .site-footer, .container, .features{ display:bloc
   text-align: center;
 }
 
+.robot-glb-viewer{
+  width: 520px;
+  height: 380px;
+  margin: 20px auto 0 auto;
+  border-radius: 0; /* blend with white page */
+  overflow: visible;
+  background: transparent; /* make viewer background transparent */
+  box-shadow: none; /* remove visible box */
+}
+
 @media (max-width:900px){
   .floating-header{ top:0; left:12px; padding:8px 12px; height:140px }
   .logo{ height:100%; width:auto; transform: translateY(-20px) }
+  .robot-glb-viewer{ width:360px; height:260px }
 }
