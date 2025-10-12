@@ -1,5 +1,4 @@
 import React from 'react'
-import RobotGLBViewer from './components/RobotGLBViewer'
 
 export default function App() {
   return (
@@ -10,7 +9,7 @@ export default function App() {
           <h1>We build robots!</h1>
           <p className="hero-sublabel">coming soon 2026....</p>
         </div>
-        <RobotGLBViewer />
+  {/* Robot viewer removed per request */}
       </main>
     </div>
   )

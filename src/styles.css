@@ -113,24 +113,7 @@ main, footer, .hero, .section, .site-footer, .container, .features{ display:bloc
   text-align: center;
 }
 
-.robot-glb-viewer{
-  position: absolute;
-  left: 50%;
-  top: 48%; /* moved down to create padding from headline */
-  transform: translateX(-50%);
-  width: 520px;
-  height: 380px;
-  margin: 0;
-  border-radius: 0; /* blend with page */
-  overflow: visible;
-  background: transparent;
-  box-shadow: none;
-  z-index: 20; /* above hero text so model overlaps */
-  pointer-events: auto; /* allow orbit controls to work */
-}
-
 @media (max-width:900px){
   .floating-header{ top:0; left:12px; padding:8px 12px; height:140px }
   .logo{ height:100%; width:auto; transform: translateY(-20px) }
-  .robot-glb-viewer{ width:360px; height:260px; top:52% }
 }
