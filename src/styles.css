@@ -66,8 +66,23 @@
   }
 }
 
-/* hide any remaining page content */
-main, footer, .hero, .section, .site-footer, .container, .features{ display:none !important }
+/* Make main/hero visible and center the headline */
+main, footer, .hero, .section, .site-footer, .container, .features{ display:block !important }
+
+.hero-center{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: linear-gradient(180deg, #0b1220 0%, #071025 100%);
+  color: #ffffff;
+}
+.hero-center h1{
+  font-size: clamp(28px, 6vw, 64px);
+  margin:0;
+  letter-spacing: -0.02em;
+  font-weight:700;
+}
 
 @media (max-width:900px){
   .floating-header{ top:0; left:12px; padding:8px 12px; height:140px }

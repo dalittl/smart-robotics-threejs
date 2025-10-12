@@ -9,15 +9,10 @@ export default function App() {
         </div>
       </header>
 
-      <nav className="floating-menu" aria-label="Main menu">
-        <ul>
-          <li><a href="#about">About Me</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#products">Products</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
+      {/* Hero center headline */}
+      <main className="hero-center">
+        <h1>We build robots!</h1>
+      </main>
     </div>
   )
 }
