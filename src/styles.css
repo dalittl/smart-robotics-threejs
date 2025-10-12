@@ -1,5 +1,8 @@
-.site, html, body { margin:0; padding:0; height:100%; }
+.site, html, body { margin:0; padding:0; height:100%; width:100%; }
 .site { font-family: Inter, system-ui, Arial; color: #0b1220; min-height: 100vh; background: transparent }
+
+/* Load a thin, playful font for the hero label (falls back to system sans) */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600&display=swap');
 
 /* Minimal blank page with a floating pill-like header in the top-right */
 .blank-page{ background: transparent; min-height:100vh }
@@ -24,6 +27,10 @@
   align-items: center;
   min-width: 220px;
 }
+.hero-inner {
+  display: inline-block;
+  text-align: center;
+}
 .floating-menu ul {
   list-style: none;
   margin: 0;
@@ -40,6 +47,16 @@
   color: #1a2330;
   text-decoration: none;
   padding: 8px 18px;
+.hero-sublabel {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: #6b7280; /* muted gray */
+  margin-top: 12px;
+  display: block;
+  text-transform: lowercase;
+  opacity: 0.95;
+}
   border-radius: 24px;
   transition: background 0.18s, color 0.18s;
 }
@@ -70,18 +87,30 @@
 main, footer, .hero, .section, .site-footer, .container, .features{ display:block !important }
 
 .hero-center{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background: linear-gradient(180deg, #0b1220 0%, #071025 100%);
-  color: #ffffff;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: #ffffff; /* neutral white background */
+  color: #071025;
+  z-index: 999;
 }
 .hero-center h1{
-  font-size: clamp(28px, 6vw, 64px);
-  margin:0;
+  font-size: clamp(34px, 7vw, 72px);
+  margin: 0;
   letter-spacing: -0.02em;
-  font-weight:700;
+  font-weight: 300; /* thin */
+  font-family: 'Quicksand', 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: #ffffff; /* white label background */
+  color: #071025; /* dark text for contrast */
+  padding: 22px 36px;
+  border-radius: 14px;
+  display: inline-block;
+  box-shadow: none;
+  text-align: center;
 }
 
 @media (max-width:900px){
