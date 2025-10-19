@@ -23,9 +23,9 @@ const DEFAULT_CAMERA = {
   far: 1000,
 }
 
-function ModelLoader() {
+function ModelLoader({ isDriving = false, driveSpeed = 1 }) {
   const group = useRef()
-  // Choose model URL dynamically:
+    // Choose model URL dynamically:
   // - during local development proxy /robot.glb through Vite dev server to avoid CORS
   // - in production use the public R2 URL
   const r2Url = 'https://pub-63db098fc98c4445b67e76b821321f72.r2.dev/robot.glb'
@@ -266,6 +266,26 @@ function ModelLoader() {
     }
   }, [scene, camera])
 
+  // Drive the model forward along its local -Z axis when requested
+  useFrame((_, delta) => {
+    try {
+      if (isDriving && group.current) {
+        // translateZ moves along local Z; negative Z is forward in GLTF convention
+        group.current.translateZ(-driveSpeed * delta)
+      }
+    } catch (e) {}
+  })
+
+  // Drive the model forward along its local -Z axis when requested
+  useFrame((_, delta) => {
+    try {
+      if (isDriving && group.current) {
+        // translateZ moves along local Z; negative Z is forward in GLTF convention
+        group.current.translateZ(-driveSpeed * delta)
+      }
+    } catch (e) {}
+  })
+
   return (
     <>
       <primitive ref={group} object={scene} dispose={null} />
@@ -326,6 +346,7 @@ function ModelLoader() {
           } catch (e) {}
         }}
       />
+
     </>
   )
 }
@@ -441,6 +462,8 @@ export default function RobotGLBViewer({ className = '' }){
   const [r3fActive, setR3fActive] = useState(false)
   const [modelStatus, setModelStatus] = useState('checking')
   const [timedOut, setTimedOut] = useState(false)
+  const [isDriving, setIsDriving] = useState(false)
+  const [driveSpeed, setDriveSpeed] = useState(1.2)
 
   // When R3F is not active (no in-flight assets) and the model check has
   // finished (ok or missing), hide the loader overlay.
@@ -468,7 +491,7 @@ export default function RobotGLBViewer({ className = '' }){
         {/* Spotlight above the model (controlled by overlay) */}
         <SpotLightAbove intensity={intensity} height={height} posX={posX} posZ={posZ} angle={angle} penumbra={penumbra} />
         <Suspense fallback={null}>
-          <Model onStatusChange={(s) => setModelStatus(s)} />
+          <Model onStatusChange={(s) => setModelStatus(s)} isDriving={isDriving} driveSpeed={driveSpeed} />
         </Suspense>
         {/* ProgressTracker runs inside the R3F tree and reports loading state */}
         <ProgressTracker onActiveChange={(a) => setR3fActive(!!a)} />
@@ -481,6 +504,17 @@ export default function RobotGLBViewer({ className = '' }){
 
   {/* LoaderOverlay shown while R3F is loading assets or model check is pending */}
   {isLoading ? <LoaderOverlay timedOut={timedOut} /> : null}
+
+  {/* Simple drive controls */}
+  <div style={{ position: 'fixed', left: 12, bottom: 12, zIndex: 4000, display: 'flex', gap: 8, alignItems: 'center', background: 'rgba(0,0,0,0.5)', padding: 8, borderRadius: 8 }}>
+    <button onClick={() => setIsDriving(d => !d)} style={{ padding: '8px 12px', background: isDriving ? '#d33' : '#1a1', color: '#fff', border: 'none', borderRadius: 6 }}>
+      {isDriving ? 'Stop' : 'Drive'}
+    </button>
+    <label style={{ color: '#fff', fontSize: 13, display: 'flex', alignItems: 'center', gap: 8 }}>
+      Speed
+      <input type="range" min="0.2" max="4" step="0.1" value={driveSpeed} onChange={(e) => setDriveSpeed(parseFloat(e.target.value))} />
+    </label>
+  </div>
     </div>
   )
 }
