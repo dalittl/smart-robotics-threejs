@@ -1,6 +1,6 @@
 import React, { Suspense, useRef, useEffect, useState, useMemo } from 'react'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
-import { useGLTF, useAnimations, OrbitControls, Text, Html } from '@react-three/drei'
+import { useGLTF, useAnimations, OrbitControls, Text, Html, useProgress } from '@react-three/drei'
 import * as THREE from 'three'
 // postprocessing (from three examples)
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
@@ -333,8 +333,10 @@ function ModelLoader() {
 // Renders an ASCII post-effect on top of the canvas. It creates the AsciiEffect,
 // appends its DOM element to the canvas container and renders it each frame.
 
-function Model() {
+function Model({ onStatusChange }) {
   const [status, setStatus] = useState('checking') // 'checking' | 'ok' | 'missing'
+  // allow parent to be notified of status changes via a prop
+  // (we'll accept an onStatusChange prop when Model is used)
 
   useEffect(() => {
     let cancelled = false
@@ -346,9 +348,19 @@ function Model() {
       .then((res) => {
         if (cancelled) return
         const ct = res.headers.get('content-type') || ''
-        if (ct.includes('text/html')) return setStatus('missing')
-        if (res.ok) return setStatus('ok')
-        return setStatus('missing')
+        if (ct.includes('text/html')) {
+          setStatus('missing')
+          if (typeof onStatusChange === 'function') onStatusChange('missing')
+          return
+        }
+        if (res.ok) {
+          setStatus('ok')
+          if (typeof onStatusChange === 'function') onStatusChange('ok')
+          return
+        }
+        setStatus('missing')
+        if (typeof onStatusChange === 'function') onStatusChange('missing')
+        return
       })
       .catch(() => {
         // HEAD may be blocked; try a small GET range
@@ -356,11 +368,21 @@ function Model() {
           .then((r) => {
             if (cancelled) return
             const ct2 = r.headers.get('content-type') || ''
-            if (ct2.includes('text/html')) return setStatus('missing')
-            if (r.ok) return setStatus('ok')
-            return setStatus('missing')
+            if (ct2.includes('text/html')) {
+              setStatus('missing')
+              if (typeof onStatusChange === 'function') onStatusChange('missing')
+              return
+            }
+            if (r.ok) {
+              setStatus('ok')
+              if (typeof onStatusChange === 'function') onStatusChange('ok')
+              return
+            }
+            setStatus('missing')
+            if (typeof onStatusChange === 'function') onStatusChange('missing')
+            return
           })
-          .catch(() => { if (!cancelled) setStatus('missing') })
+          .catch(() => { if (!cancelled) { setStatus('missing'); if (typeof onStatusChange === 'function') onStatusChange('missing') } })
       })
 
     return () => { cancelled = true }
@@ -389,6 +411,25 @@ function Model() {
   return <ModelLoader />
 }
 
+// ProgressTracker: uses drei's useProgress inside the R3F tree and reports
+// active state upward so the UI can hide the spinner when loading completes.
+function ProgressTracker({ onActiveChange }) {
+  const { active } = useProgress()
+  useEffect(() => { if (typeof onActiveChange === 'function') onActiveChange(active) }, [active, onActiveChange])
+  return null
+}
+
+function LoaderOverlay({ timedOut = false }) {
+  return (
+    <div className="loader-overlay" role="status" aria-live="polite">
+      <div style={{ textAlign: 'center' }}>
+        <div className="spinner" aria-hidden="true"></div>
+        {timedOut ? <div style={{ color: '#fff', marginTop: 12, fontSize: 14 }}>Still loading — please try again or check your connection.</div> : null}
+      </div>
+    </div>
+  )
+}
+
 export default function RobotGLBViewer({ className = '' }){
   const [intensity, setIntensity] = useState(3.2)
   const [height, setHeight] = useState(8)
@@ -396,6 +437,27 @@ export default function RobotGLBViewer({ className = '' }){
   const [posZ, setPosZ] = useState(0)
   const [angle, setAngle] = useState(Math.PI / 10)
   const [penumbra, setPenumbra] = useState(0.2)
+  const [isLoading, setIsLoading] = useState(true)
+  const [r3fActive, setR3fActive] = useState(false)
+  const [modelStatus, setModelStatus] = useState('checking')
+  const [timedOut, setTimedOut] = useState(false)
+
+  // When R3F is not active (no in-flight assets) and the model check has
+  // finished (ok or missing), hide the loader overlay.
+  useEffect(() => {
+    if (!r3fActive && (modelStatus === 'ok' || modelStatus === 'missing')) setIsLoading(false)
+    else setIsLoading(true)
+  }, [r3fActive, modelStatus])
+
+  // Safety timeout: if still loading after 20s, hide spinner and mark timedOut
+  useEffect(() => {
+    let t = null
+    if (isLoading) {
+      setTimedOut(false)
+      t = setTimeout(() => { setIsLoading(false); setTimedOut(true) }, 20000)
+    }
+    return () => { if (t) clearTimeout(t) }
+  }, [isLoading])
 
   return (
     <div className={`robot-glb-viewer ${className}`}>
@@ -406,8 +468,10 @@ export default function RobotGLBViewer({ className = '' }){
         {/* Spotlight above the model (controlled by overlay) */}
         <SpotLightAbove intensity={intensity} height={height} posX={posX} posZ={posZ} angle={angle} penumbra={penumbra} />
         <Suspense fallback={null}>
-          <Model />
+          <Model onStatusChange={(s) => setModelStatus(s)} />
         </Suspense>
+        {/* ProgressTracker runs inside the R3F tree and reports loading state */}
+        <ProgressTracker onActiveChange={(a) => setR3fActive(!!a)} />
         {/* ground plane is rendered inside the loaded model so it follows model bounds */}
         {/* Slight bloom post-processing to make emissive parts glow softly */}
         {/* Reduced bloom: subtle glow on emissive areas */}
@@ -415,19 +479,8 @@ export default function RobotGLBViewer({ className = '' }){
       </Canvas>
       {/* Spotlight controls hidden by request. To re-enable, render <SpotlightControlsOverlay /> here. */}
 
-      {/* Small helper: reset saved camera to default (clears localStorage robotCamera) */}
-      <div style={{ position: 'fixed', right: 12, bottom: 12, zIndex: 2000 }}>
-        <button
-          onClick={() => {
-            try {
-              if (typeof window !== 'undefined' && window.localStorage) localStorage.removeItem('robotCamera')
-            } catch (e) {}
-            // reload so the DEFAULT_CAMERA is applied on next mount
-            try { window.location.reload() } catch (e) {}
-          }}
-          style={{ background: '#111', color: '#fff', border: '1px solid #333', padding: '6px 10px', borderRadius: 6, fontSize: 12 }}
-        >Reset camera</button>
-      </div>
+  {/* LoaderOverlay shown while R3F is loading assets or model check is pending */}
+  {isLoading ? <LoaderOverlay timedOut={timedOut} /> : null}
     </div>
   )
 }

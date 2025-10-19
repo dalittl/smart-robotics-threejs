@@ -148,3 +148,23 @@ main, footer, .hero, .section, .site-footer, .container, .features{ display:bloc
   .floating-header{ top:0; left:12px; padding:8px 12px; height:140px }
   .logo{ height:100%; width:auto; transform: translateY(-20px) }
 }
+
+/* Loading spinner overlay */
+.loader-overlay{
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
+  z-index: 3000;
+}
+.spinner {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 6px solid rgba(255,255,255,0.12);
+  border-top-color: #ffffff;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
