@@ -1,8 +1,9 @@
+ @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600&display=swap');
+
 .site, html, body { margin:0; padding:0; height:100%; width:100%; }
-.site { font-family: Inter, system-ui, Arial; color: #0b1220; min-height: 100vh; background: transparent }
+.site { font-family: Inter, system-ui, Arial; color: #ffffff; min-height: 100vh; background: #000000 }
 
 /* Load a thin, playful font for the hero label (falls back to system sans) */
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600&display=swap');
 
 /* Minimal blank page with a floating pill-like header in the top-right */
 .blank-page{ background: transparent; min-height:100vh }
@@ -19,13 +20,13 @@
   top: 32px;
   right: 32px;
   z-index: 1001;
-  background: rgba(255,255,255,0.92);
+  background: rgba(20,20,20,0.6);
   box-shadow: none;
   border-radius: 32px;
-  padding: 18px 32px;
+  padding: 12px 20px;
   display: flex;
   align-items: center;
-  min-width: 220px;
+  min-width: 180px;
 }
 .hero-inner {
   display: inline-block;
@@ -44,25 +45,26 @@
 .floating-menu a {
   font-size: 1.08rem;
   font-weight: 500;
-  color: #1a2330;
+  color: #ffffff;
   text-decoration: none;
-  padding: 8px 18px;
-.hero-sublabel {
-  font-family: 'Quicksand', sans-serif;
-  font-weight: 300;
-  font-size: 16px;
-  color: #6b7280; /* muted gray */
-  margin-top: 12px;
-  display: block;
-  text-transform: lowercase;
-  opacity: 0.95;
-}
+  padding: 8px 14px;
   border-radius: 24px;
   transition: background 0.18s, color 0.18s;
 }
 .floating-menu a:hover, .floating-menu a:focus {
-  background: #e6eefc;
-  color: #2563eb;
+  background: rgba(255,255,255,0.06);
+  color: #ffffff;
+}
+
+.hero-sublabel {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: #ffffff; /* muted white on dark background */
+  margin-top: 12px;
+  display: block;
+  text-transform: lowercase;
+  opacity: 0.95;
 }
 
 @media (max-width:900px){
@@ -104,13 +106,36 @@ main, footer, .hero, .section, .site-footer, .container, .features{ display:bloc
   letter-spacing: -0.02em;
   font-weight: 300; /* thin */
   font-family: 'Quicksand', 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background: #ffffff; /* white label background */
-  color: #071025; /* dark text for contrast */
+  background: rgba(255,255,255,0.03); /* subtle translucent label on dark bg */
+  color: #ffffff; /* white text for contrast */
   padding: 22px 36px;
   border-radius: 14px;
   display: inline-block;
   box-shadow: none;
   text-align: center;
+}
+
+/* Make the 3D viewer cover the entire viewport so the pan takes up the page */
+.robot-glb-viewer{
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  background: transparent;
+  z-index: 1;
+  /* allow pointer events so users can orbit/zoom the model */
+  pointer-events: auto;
+}
+
+/* Ensure the canvas created by react-three-fiber fills the viewer */
+.robot-glb-viewer > canvas { width: 100% !important; height: 100% !important; display: block }
+
+/* Keep hero centered and above the viewer */
+.hero-center{ z-index: 2 }
+
+@media (max-width:900px){
+  .robot-glb-viewer{ width: 360px; height: 260px }
 }
 
 @media (max-width:900px){
