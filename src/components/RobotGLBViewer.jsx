@@ -338,7 +338,9 @@ function Model() {
 
   useEffect(() => {
     let cancelled = false
-    const url = '/robot.glb'
+    // Use the same modelUrl selection as ModelLoader so production uses the R2 URL
+    const r2Url = 'https://pub-63db098fc98c4445b67e76b821321f72.r2.dev/robot.glb'
+    const url = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV) ? '/robot.glb' : r2Url
     // Try to fetch only headers (HEAD) first. Some servers disallow HEAD; fallback to GET range.
     fetch(url, { method: 'HEAD' })
       .then((res) => {
