@@ -1,6 +1,6 @@
 import React, { Suspense, useRef, useEffect, useState, useMemo } from 'react'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
-import { useGLTF, useAnimations, OrbitControls, Text } from '@react-three/drei'
+import { useGLTF, useAnimations, OrbitControls, Text, Html } from '@react-three/drei'
 import * as THREE from 'three'
 // postprocessing (from three examples)
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
@@ -25,7 +25,15 @@ const DEFAULT_CAMERA = {
 
 function ModelLoader() {
   const group = useRef()
-  const { scene, animations } = useGLTF('/robot.glb')
+  // Choose model URL dynamically:
+  // - during local development proxy /robot.glb through Vite dev server to avoid CORS
+  // - in production use the public R2 URL
+  const r2Url = 'https://pub-63db098fc98c4445b67e76b821321f72.r2.dev/robot.glb'
+  // Use Vite's DEV flag so the local proxy is used in development regardless of hostname
+  const modelUrl = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV)
+    ? '/robot.glb'
+    : r2Url
+  const { scene, animations } = useGLTF(modelUrl)
   const { actions, names } = useAnimations(animations, group)
   const controlsRef = useRef()
   const { camera } = useThree()
@@ -365,11 +373,14 @@ function Model() {
         'Place the file in the project `public/` folder or update the path in `RobotGLBViewer.jsx`.')
     }
 
+    // Use <Html> so we don't render raw DOM directly under the R3F <Canvas>
     return (
-      <div className="robot-glb-missing" style={{color: '#666', textAlign: 'center'}}>
-        <div style={{fontSize: 12}}>3D model not found</div>
-        <div style={{fontSize: 11}}>Expecting <code>/robot.glb</code> in the dev server root (public/)</div>
-      </div>
+      <Html center>
+        <div className="robot-glb-missing" style={{color: '#666', textAlign: 'center', background: 'rgba(0,0,0,0.6)', padding: 8, borderRadius: 6}}>
+          <div style={{fontSize: 12}}>3D model not found</div>
+          <div style={{fontSize: 11}}>Expecting <code>/robot.glb</code> in the dev server root (public/)</div>
+        </div>
+      </Html>
     )
   }
 
@@ -514,7 +525,7 @@ function ModelLabel({ labelY = 1.4 }) {
   // apply it each frame so the shift remains correct with camera changes.
   const groupRef = useRef()
   const { camera, size } = useThree()
-  const PIXELS = 20
+  const PIXELS = 40
 
   // reusable temp vectors to avoid allocations inside the frame loop
   const tmpWorld = useMemo(() => new THREE.Vector3(), [])
