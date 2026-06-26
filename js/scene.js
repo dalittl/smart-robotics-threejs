@@ -224,12 +224,12 @@ export function initHeroScene(canvas) {
 
     eve.material.emissiveIntensity = 1.3 + Math.sin(t * 2.0) * 0.3;
 
-    // Central planet cycles through every hue (glow follows)
-    const hue = (t * 0.16) % 1;
-    apollo.material.color.setHSL(hue, 0.65, 0.6);
-    apollo.material.emissive.setHSL(hue, 0.85, 0.45);
-    apollo.material.emissiveIntensity = 0.7;
-    key.color.setHSL(hue, 0.7, 0.55);
+    // Central planet slowly transitions black -> white -> black
+    const v = Math.sin(t * 0.2) * 0.5 + 0.5;
+    apollo.material.color.setRGB(v, v, v);
+    apollo.material.emissive.setRGB(v, v, v);
+    apollo.material.emissiveIntensity = v * 0.8;
+    key.color.setRGB(0.55 + v * 0.45, 0.62 + v * 0.38, 1.0);
 
     // System slow tumble + scroll-driven rotation
     system.rotation.y = t * 0.08 + scrollProgress * Math.PI * 1.2;
