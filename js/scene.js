@@ -64,18 +64,18 @@ export function initHeroScene(canvas) {
   );
   system.add(apollo);
 
-  // Eve — the smaller orbit-blue companion
+  // Eve — the smaller companion orb (white)
   const eve = new THREE.Mesh(
     new THREE.SphereGeometry(0.62, 48, 48),
     new THREE.MeshStandardMaterial({
-      color: PALETTE.orbit,
-      emissive: PALETTE.orbit,
+      color: PALETTE.ion,
+      emissive: PALETTE.ion,
       emissiveIntensity: 1.4,
       roughness: 0.25,
       metalness: 0.2,
     })
   );
-  const eveLight = new THREE.PointLight(PALETTE.orbit, 24, 30);
+  const eveLight = new THREE.PointLight(PALETTE.ion, 24, 30);
   eve.add(eveLight);
   system.add(eve);
 
@@ -110,7 +110,7 @@ export function initHeroScene(canvas) {
   // A drifting moon on the outer ring
   const moon = new THREE.Mesh(
     new THREE.SphereGeometry(0.18, 24, 24),
-    new THREE.MeshStandardMaterial({ color: PALETTE.glow, emissive: PALETTE.glow, emissiveIntensity: 1.2 })
+    new THREE.MeshStandardMaterial({ color: PALETTE.ion, emissive: PALETTE.ion, emissiveIntensity: 1.2 })
   );
   system.add(moon);
 
