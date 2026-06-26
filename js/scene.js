@@ -228,7 +228,7 @@ export function initHeroScene(canvas) {
     const v = Math.sin(t * 0.4) * 0.5 + 0.5;
     apollo.material.color.setRGB(v, v, v);
     apollo.material.emissive.setRGB(v, v, v);
-    apollo.material.emissiveIntensity = v * 0.8;
+    apollo.material.emissiveIntensity = v * 1.6;
     key.color.setRGB(0.55 + v * 0.45, 0.62 + v * 0.38, 1.0);
 
     // System slow tumble + scroll-driven rotation
