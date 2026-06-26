@@ -474,8 +474,8 @@ main { position: relative; z-index: 2; }
 }
 .logo__mark {
   position: relative;
-  width: 48px;
-  height: 48px;
+  width: 64px;
+  height: 64px;
   flex-shrink: 0;
 }
 .logo__ring {
@@ -510,7 +510,7 @@ main { position: relative; z-index: 2; }
 }
 .logo__word {
   font-family: "Chakra Petch", "Inter", sans-serif;
-  font-size: clamp(1.4rem, 3.2vw, 2.2rem);
+  font-size: clamp(2rem, 5vw, 3.4rem);
   font-weight: 500;
   line-height: 1;
   letter-spacing: 0.16em;
