@@ -510,7 +510,7 @@ main { position: relative; z-index: 2; }
 }
 .logo__word {
   font-family: "Chakra Petch", "Inter", sans-serif;
-  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-size: clamp(2.8rem, 8vw, 5.6rem);
   font-weight: 500;
   line-height: 1;
   letter-spacing: 0.16em;
