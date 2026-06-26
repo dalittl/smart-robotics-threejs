@@ -5,6 +5,28 @@
 import { initHeroScene } from "./scene.js";
 import { initEveScene } from "./eve.js";
 
+/* ---------- Disable page zoom ---------- */
+function disableZoom() {
+  // Ctrl/Cmd + mouse wheel zoom
+  window.addEventListener(
+    "wheel",
+    (e) => {
+      if (e.ctrlKey || e.metaKey) e.preventDefault();
+    },
+    { passive: false }
+  );
+  // Ctrl/Cmd + (+/-/0) keyboard zoom
+  window.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && ["+", "-", "=", "0"].includes(e.key)) {
+      e.preventDefault();
+    }
+  });
+  // Safari pinch-zoom gestures
+  ["gesturestart", "gesturechange", "gestureend"].forEach((evt) =>
+    document.addEventListener(evt, (e) => e.preventDefault(), { passive: false })
+  );
+}
+
 /* ---------- Boot / preloader ---------- */
 function runBoot() {
   const boot = document.getElementById("boot");
@@ -112,6 +134,7 @@ function wireNav() {
 
 /* ---------- Init ---------- */
 window.addEventListener("DOMContentLoaded", () => {
+  disableZoom();
   runBoot();
   bootScenes();
   wireScroll();
