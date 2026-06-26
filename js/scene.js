@@ -225,7 +225,7 @@ export function initHeroScene(canvas) {
     eve.material.emissiveIntensity = 1.3 + Math.sin(t * 2.0) * 0.3;
 
     // Central planet slowly transitions black -> white -> black
-    const v = Math.sin(t * 0.2) * 0.5 + 0.5;
+    const v = Math.sin(t * 0.4) * 0.5 + 0.5;
     apollo.material.color.setRGB(v, v, v);
     apollo.material.emissive.setRGB(v, v, v);
     apollo.material.emissiveIntensity = v * 0.8;
