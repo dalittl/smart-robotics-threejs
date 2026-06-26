@@ -113,7 +113,7 @@ export function initHeroScene(canvas) {
 
   // Orbit rings (the binary paths)
   const ringMat = new THREE.MeshBasicMaterial({
-    color: 0x00e0d4,
+    color: PALETTE.orbit,
     transparent: true,
     opacity: 0.32,
     side: THREE.DoubleSide,
@@ -121,7 +121,7 @@ export function initHeroScene(canvas) {
     depthWrite: false,
   });
   const ringMatFaint = new THREE.MeshBasicMaterial({
-    color: 0x00e0d4,
+    color: PALETTE.glow,
     transparent: true,
     opacity: 0.16,
     side: THREE.DoubleSide,
