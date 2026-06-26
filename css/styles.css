@@ -460,6 +460,8 @@ main { position: relative; z-index: 2; }
 .brand {
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   gap: 18px;
   animation: logoIn 1.4s var(--ease) both;
 }
