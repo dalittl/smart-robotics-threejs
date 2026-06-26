@@ -1,0 +1,18 @@
+{
+  "name": "apollo-eve-website",
+  "version": "1.0.0",
+  "description": "Apollo Eve — a 3D brand experience. Robots you'll fall for.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  }
+}
