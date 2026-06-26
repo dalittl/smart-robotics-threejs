@@ -113,16 +113,20 @@ export function initHeroScene(canvas) {
 
   // Orbit rings (the binary paths)
   const ringMat = new THREE.MeshBasicMaterial({
-    color: PALETTE.orbit,
+    color: 0x00e0d4,
+    transparent: true,
+    opacity: 0.32,
+    side: THREE.DoubleSide,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const ringMatFaint = new THREE.MeshBasicMaterial({
+    color: 0x00e0d4,
     transparent: true,
     opacity: 0.16,
     side: THREE.DoubleSide,
-  });
-  const ringMatFaint = new THREE.MeshBasicMaterial({
-    color: PALETTE.glow,
-    transparent: true,
-    opacity: 0.07,
-    side: THREE.DoubleSide,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
   });
   const orbitRadius = 5.4;
   const ring1 = new THREE.Mesh(new THREE.RingGeometry(orbitRadius - 0.015, orbitRadius + 0.015, 200), ringMat);
@@ -163,7 +167,7 @@ export function initHeroScene(canvas) {
   starGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
   starGeo.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
   const starMat = new THREE.PointsMaterial({
-    color: 0x9fb6d8,
+    color: 0xffffff,
     size: 0.16,
     map: starTexture,
     alphaTest: 0.04,
@@ -190,7 +194,7 @@ export function initHeroScene(canvas) {
   const dust = new THREE.Points(
     dustGeo,
     new THREE.PointsMaterial({
-      color: PALETTE.orbit,
+      color: 0xffffff,
       size: 0.18,
       map: starTexture,
       alphaTest: 0.04,
