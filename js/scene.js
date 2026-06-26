@@ -224,6 +224,11 @@ export function initHeroScene(canvas) {
 
     eve.material.emissiveIntensity = 1.3 + Math.sin(t * 2.0) * 0.3;
 
+    // Central planet cycles through every hue
+    const hue = (t * 0.08) % 1;
+    apollo.material.color.setHSL(hue, 0.65, 0.6);
+    apollo.material.emissive.setHSL(hue, 0.8, 0.4);
+
     // System slow tumble + scroll-driven rotation
     system.rotation.y = t * 0.08 + scrollProgress * Math.PI * 1.2;
     system.rotation.x = 0.5 + Math.sin(t * 0.15) * 0.05 + scrollProgress * 0.4;
