@@ -499,14 +499,15 @@ main { position: relative; z-index: 2; }
   box-shadow: 0 0 24px rgba(255, 255, 255, 0.5);
 }
 .logo__word {
-  font-family: "Orbitron", "Inter", sans-serif;
-  font-size: clamp(2.6rem, 9vw, 6.6rem);
+  font-family: "Chakra Petch", "Inter", sans-serif;
+  font-size: clamp(2.8rem, 9vw, 6.8rem);
   font-weight: 500;
   line-height: 1.04;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ion);
-  text-shadow: 0 0 28px rgba(74, 158, 255, 0.35);
+  text-shadow: 0 0 22px rgba(74, 158, 255, 0.28);
+  animation: blink 3.6s steps(1, end) 1.4s infinite;
 }
 .logo__period {
   display: inline-block;
@@ -526,6 +527,12 @@ main { position: relative; z-index: 2; }
 @keyframes logoIn {
   from { opacity: 0; transform: translateY(20px); filter: blur(8px); }
   to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+@keyframes blink {
+  0%, 78% { opacity: 1; }
+  79%, 88% { opacity: 0; }
+  89%, 100% { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
