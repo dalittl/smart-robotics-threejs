@@ -256,6 +256,17 @@ export function initHeroScene(canvas) {
   return {
     setScroll,
     setFocus,
+    // Project the orbiting dot (moon) to 2D screen pixels
+    getMoonScreen() {
+      const v = new THREE.Vector3();
+      moon.getWorldPosition(v);
+      v.project(camera);
+      return {
+        x: (v.x * 0.5 + 0.5) * window.innerWidth,
+        y: (-v.y * 0.5 + 0.5) * window.innerHeight,
+        visible: v.z < 1,
+      };
+    },
     dispose() {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);

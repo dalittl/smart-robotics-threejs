@@ -132,6 +132,43 @@ function wireNav() {
   });
 }
 
+/* ---------- Hotspot tracking + About dialog ---------- */
+function wireAbout() {
+  const hotspot = document.getElementById("hotspot");
+  const modal = document.getElementById("aboutModal");
+  if (!hotspot || !modal) return;
+
+  // Keep the hotspot glued to the orbiting dot
+  function follow() {
+    requestAnimationFrame(follow);
+    if (!hero || !hero.getMoonScreen) return;
+    const p = hero.getMoonScreen();
+    if (p.visible) {
+      hotspot.style.left = p.x + "px";
+      hotspot.style.top = p.y + "px";
+      hotspot.classList.add("is-ready");
+    } else {
+      hotspot.classList.remove("is-ready");
+    }
+  }
+  follow();
+
+  const open = () => {
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+  };
+  const close = () => {
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+  };
+
+  hotspot.addEventListener("click", open);
+  modal.querySelectorAll("[data-close]").forEach((el) => el.addEventListener("click", close));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.classList.contains("is-open")) close();
+  });
+}
+
 /* ---------- Init ---------- */
 window.addEventListener("DOMContentLoaded", () => {
   disableZoom();
@@ -141,4 +178,5 @@ window.addEventListener("DOMContentLoaded", () => {
   wireReveal();
   wireCards();
   wireNav();
+  wireAbout();
 });

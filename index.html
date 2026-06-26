@@ -25,6 +25,23 @@
     <span class="coming">Coming Soon</span>
   </main>
 
+  <!-- Interactive hotspot that tracks the orbiting dot -->
+  <button class="hotspot" id="hotspot" type="button" aria-label="About us">
+    <span class="hotspot__pulse"></span>
+    <span class="hotspot__label">About</span>
+  </button>
+
+  <!-- About Us dialog -->
+  <div class="modal" id="aboutModal" aria-hidden="true">
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+      <button class="modal__close" type="button" data-close aria-label="Close">&times;</button>
+      <span class="modal__kicker">About Us</span>
+      <h2 id="aboutTitle">Building solutions for our next takeoff.</h2>
+      <button class="modal__cta" type="button" data-close>Close</button>
+    </div>
+  </div>
+
   <script type="module" src="/js/main.js"></script>
 </body>
 </html>
