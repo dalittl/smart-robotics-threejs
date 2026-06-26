@@ -36,6 +36,38 @@ export function initHeroScene(canvas) {
   );
   camera.position.set(0, 0, 16);
 
+  // ---- Star-shaped sprite texture (for floating particles) ----
+  function makeStarTexture() {
+    const size = 64;
+    const cv = document.createElement("canvas");
+    cv.width = cv.height = size;
+    const ctx = cv.getContext("2d");
+    const cx = size / 2;
+    const cy = size / 2;
+    const spikes = 5;
+    const outer = size * 0.46;
+    const inner = outer * 0.42;
+    ctx.beginPath();
+    for (let i = 0; i < spikes * 2; i++) {
+      const radius = i % 2 === 0 ? outer : inner;
+      const ang = (Math.PI / spikes) * i - Math.PI / 2;
+      const x = cx + Math.cos(ang) * radius;
+      const y = cy + Math.sin(ang) * radius;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, outer);
+    grad.addColorStop(0, "rgba(255,255,255,1)");
+    grad.addColorStop(0.6, "rgba(255,255,255,0.95)");
+    grad.addColorStop(1, "rgba(255,255,255,0.2)");
+    ctx.fillStyle = grad;
+    ctx.fill();
+    const tex = new THREE.CanvasTexture(cv);
+    tex.needsUpdate = true;
+    return tex;
+  }
+  const starTexture = makeStarTexture();
+
   // ---- Lighting ----
   scene.add(new THREE.AmbientLight(0x223047, 0.6));
   const key = new THREE.PointLight(PALETTE.orbit, 80, 60);
@@ -133,6 +165,8 @@ export function initHeroScene(canvas) {
   const starMat = new THREE.PointsMaterial({
     color: 0x9fb6d8,
     size: 0.16,
+    map: starTexture,
+    alphaTest: 0.04,
     sizeAttenuation: true,
     transparent: true,
     opacity: 0.85,
@@ -157,9 +191,11 @@ export function initHeroScene(canvas) {
     dustGeo,
     new THREE.PointsMaterial({
       color: PALETTE.orbit,
-      size: 0.05,
+      size: 0.18,
+      map: starTexture,
+      alphaTest: 0.04,
       transparent: true,
-      opacity: 0.5,
+      opacity: 0.6,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
     })
