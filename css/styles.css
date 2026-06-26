@@ -446,27 +446,37 @@ main { position: relative; z-index: 2; }
 /* ---------------- Minimal landing (logo only) ---------------- */
 .landing { height: 100vh; overflow: hidden; }
 
-.logo-stage {
+.stage {
   position: fixed;
   inset: 0;
   z-index: 2;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-.logo {
-  text-align: center;
-  display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
+  justify-content: space-between;
+  padding: clamp(36px, 7vh, 80px) 24px;
+  pointer-events: none;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
   animation: logoIn 1.4s var(--ease) both;
+}
+.coming {
+  font-family: "Chakra Petch", "Inter", sans-serif;
+  font-size: clamp(0.72rem, 1.5vw, 0.95rem);
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding-left: 0.5em;
+  animation: logoIn 1.4s var(--ease) 0.4s both, comingPulse 3s ease-in-out 1.4s infinite;
 }
 .logo__mark {
   position: relative;
-  width: 60px;
-  height: 60px;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
 }
 .logo__ring {
   position: absolute;
@@ -500,10 +510,10 @@ main { position: relative; z-index: 2; }
 }
 .logo__word {
   font-family: "Chakra Petch", "Inter", sans-serif;
-  font-size: clamp(2.8rem, 9vw, 6.8rem);
+  font-size: clamp(1.4rem, 3.2vw, 2.2rem);
   font-weight: 500;
-  line-height: 1.04;
-  letter-spacing: 0.08em;
+  line-height: 1;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--ion);
   text-shadow: 0 0 22px rgba(74, 158, 255, 0.28);
@@ -533,6 +543,11 @@ main { position: relative; z-index: 2; }
   0%, 78% { opacity: 1; }
   79%, 88% { opacity: 0; }
   89%, 100% { opacity: 1; }
+}
+
+@keyframes comingPulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
