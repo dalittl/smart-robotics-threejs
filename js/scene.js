@@ -171,9 +171,9 @@ export function initHeroScene(canvas) {
   composer.addPass(new RenderPass(scene, camera));
   const bloom = new UnrealBloomPass(
     new THREE.Vector2(window.innerWidth, window.innerHeight),
-    0.9, // strength
-    0.7, // radius
-    0.2 // threshold
+    0.6, // strength
+    0.6, // radius
+    0.25 // threshold
   );
   composer.addPass(bloom);
 
