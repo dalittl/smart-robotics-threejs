@@ -499,18 +499,21 @@ main { position: relative; z-index: 2; }
   box-shadow: 0 0 24px rgba(255, 255, 255, 0.5);
 }
 .logo__word {
-  font-size: clamp(3.4rem, 12vw, 8rem);
-  font-weight: 300;
-  line-height: 0.9;
-  letter-spacing: -0.03em;
+  font-family: "Orbitron", "Inter", sans-serif;
+  font-size: clamp(2.6rem, 9vw, 6.6rem);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--ion);
+  text-shadow: 0 0 28px rgba(74, 158, 255, 0.35);
 }
 .logo__period {
   display: inline-block;
-  width: 0.14em;
-  height: 0.14em;
+  width: 0.1em;
+  height: 0.1em;
   background: var(--orbit);
-  margin-left: 0.04em;
+  margin-left: 0.06em;
   box-shadow: 0 0 28px var(--orbit);
 }
 .logo__sub {
